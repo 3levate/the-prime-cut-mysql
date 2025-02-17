@@ -1,16 +1,17 @@
 const TOTAL_HOURS_RESTAURANT_OPEN_DAILY = 7;
 const today = new Date();
 const todayDateFormatted = new Date().toISOString().split("T")[0];
-const reservations = getReservations();
+let reservations;
 const DAY_OF_WEEK_NAME_ID_MAPPING = [6, 0, 1, 2, 3, 4, 5];
 const ALL_RESTAURANT_OPEN_HOURS = [3, 4, 5, 6, 7, 8, 9];
+const TABLE_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 let GLOBAL_STATE_CURRENT_MONTH = new Date();
 let GLOBAL_STATE_SELECTED_TABLE = null;
 let GLOBAL_STATE_SELECTED_TIMESLOT = null;
 
-async function getReservations() {
+async function getReservations(date) {
   try {
-    const response = await fetch("http://localhost:8000/reservations");
+    const response = await fetch(`/reservations?date=${date}`);
     return await response.json();
   } catch (error) {
     console.log(error);
@@ -19,17 +20,19 @@ async function getReservations() {
 }
 
 async function highlightReservedTables(date) {
-  const localReservations = await reservations;
+  reservations = await getReservations(date);
+  console.log("highlightReservedTables reservations", reservations);
   console.log("highlightReservedTables called with date", date);
 
-  for (const [tableNumber, tableReservations] of localReservations.entries()) {
-    const table = document.querySelector(`.table[data-table-id="${tableNumber + 1}"]`);
+  for (const tableNumber of TABLE_NUMBERS) {
+    const reservedHours = await getReservedHoursByTableNumber(tableNumber);
+    const table = document.querySelector(`.table[data-table-id="${tableNumber}"]`);
 
-    if (tableReservations[date] && tableReservations[date].length) {
-      if (tableReservations[date].length == TOTAL_HOURS_RESTAURANT_OPEN_DAILY) {
+    if (reservedHours) {
+      if (reservedHours.length == TOTAL_HOURS_RESTAURANT_OPEN_DAILY) {
         table.classList.remove("some-availability");
         table.classList.add("reserved");
-      } else if (tableReservations[date].length < TOTAL_HOURS_RESTAURANT_OPEN_DAILY) {
+      } else if (reservedHours.length < TOTAL_HOURS_RESTAURANT_OPEN_DAILY) {
         table.classList.remove("reserved");
         table.classList.add("some-availability");
       }
@@ -37,34 +40,38 @@ async function highlightReservedTables(date) {
       // colour tables green or just leave as outline?
       table.classList.remove("reserved");
       table.classList.remove("some-availability");
-      console.log("table is available", table);
     }
   }
 }
 
-async function addAvailableTableTimeslots(tableNumber) {
+async function addAvailableTableTimeslots(selectedTable) {
   if (GLOBAL_STATE_SELECTED_TABLE) return;
 
-  const localReservations = await reservations;
   const timeslotsContainer = document.getElementById("timeslots-container");
-  const currentDateHoursTableReserved =
-    localReservations[tableNumber - 1]?.[GLOBAL_STATE_CURRENT_MONTH.toISOString().split("T")[0]];
+  const reservedHours = await getReservedHoursByTableNumber(selectedTable);
 
   deleteAllTimeslots();
 
-  if (!currentDateHoursTableReserved || !currentDateHoursTableReserved.length) {
+  if (!reservedHours || !reservedHours.length) {
     //add all timeslots
     for (let i = 3; i <= 9; i++) {
       createTimeslot(i, timeslotsContainer);
     }
   } else {
     const availableHours = ALL_RESTAURANT_OPEN_HOURS.filter(
-      (hour) => !currentDateHoursTableReserved.includes(hour)
+      (hour) => !reservedHours.includes(hour)
     );
     for (const hour of availableHours.sort()) {
       createTimeslot(hour, timeslotsContainer);
     }
   }
+}
+
+async function getReservedHoursByTableNumber(tableNum) {
+  return await reservations
+    .find((tableReservation) => tableReservation.table_number == tableNum)
+    ?.hours.split(", ")
+    .map((hour) => Number(hour));
 }
 
 function createTimeslot(hour, timeslotsContainer) {

@@ -1,6 +1,6 @@
 const PORT = 8000;
 import express, { json, static as expressStatic } from "express";
-import { createConnection } from "mysql2";
+import { createConnection } from "mysql2/promise";
 const app = express();
 import { readFileSync, writeFileSync } from "fs";
 import { createServer } from "livereload";
@@ -12,7 +12,7 @@ liveReloadServer.watch("./public/");
 app.use(connectLiveReload());
 
 //mysql -u root -p
-const connection = createConnection({
+const connection = await createConnection({
   host: "localhost",
   user: "root",
   password: "",
@@ -27,32 +27,58 @@ app.use("/html", expressStatic("./app/html"));
 app.use("/data", expressStatic("./app/data"));
 
 app.get("/", (request, response) => {
-  response.send(readFileSync("./app/html/index.html", "utf8"));
+  response.status(200).send(readFileSync("./app/html/index.html", "utf8"));
 });
 
-app.get("/reservations", (request, response) => {
-  const reservations = readFileSync("./app/data/reservations.json", "utf8");
-
-  console.log("sending reservations");
-  response.send(reservations);
-});
-
-app.post("/reservations", (request, response) => {
+app.get("/reservations", async (request, response) => {
+  //TODO
+  const { date } = request.query;
   try {
-    const reservationsFile = readFileSync("./app/data/reservations.json", "utf8");
-    const reservations = JSON.parse(reservationsFile);
-    const { name, email, date, time, table } = request.body;
-
-    //if table has not been reserved at all, create entry for it
-    reservations[table][date] ||= [];
-    reservations[table][date].push(parseInt(time));
-
-    writeFileSync("./app/data/reservations.json", JSON.stringify(reservations), "utf8");
-    console.log("Updated reservations");
-    response.send("Updated reservation");
+    const [reservations] = await connection.execute(
+      `SELECT 
+        table_number,
+        GROUP_CONCAT(hour SEPARATOR ', ') AS hours
+      FROM reservations
+      WHERE date=?
+      GROUP BY table_number;`,
+      [date]
+    );
+    console.log(`sending reservations for date: ${date}`, reservations);
+    response.status(200).send(reservations);
   } catch (error) {
-    console.log(error.name, error);
-    response.send(`Server side ${error.name}`, error);
+    console.error(`Error sending reservations for date: ${date}`, error);
+    response.status(500).send(`Error sending reservations for date: ${date}`, error);
+  }
+});
+
+app.post("/reservations", async (request, response) => {
+  try {
+    const { name, email, date, time, table } = request.body;
+    await connection.beginTransaction();
+
+    //FIXME
+    const [guestInsertResult] = await connection.execute(`
+      INSERT INTO guests (first_name, email)
+      SELECT '${name}', '${email}'
+      WHERE NOT EXISTS (
+        SELECT 1 
+        FROM guests 
+        WHERE first_name = '${name}'
+          AND email = '${email}');
+    `);
+    console.log(guestInsertResult);
+    const [reservationInsertResult] = await connection.execute(`
+      INSERT INTO reservations (guest_id, table_number, date, hour)
+      VALUES (${guestInsertResult.insertId}, ${table}, '${date}', ${time});
+    `);
+    console.log(reservationInsertResult);
+
+    await connection.commit();
+    response.status(200).send("Successfully updated reservations.");
+  } catch (error) {
+    await connection.rollback();
+    console.error("Error updating reservations, transaction rolled back.", error);
+    response.status(500).send("Error updating reservations, transaction rolled back.", error);
   }
 });
 
