@@ -65,10 +65,9 @@ body {
   #confirm-reservation {
     position: fixed;
     top: 0;
-    left: -50%;
+    left: -100%;
     width: 50%;
     height: 100%;
-    transition: left 0.3s;
     z-index: 9999;
     box-sizing: border-box;
     transition: left 0.5s ease-in-out;
@@ -171,18 +170,16 @@ body {
 
         .inputs {
           padding: 5px 0 0 15px;
-          width: 20rem;
+          width: 19.5rem;
           height: 2.5rem;
           border: none;
           color: white;
-          font-size: 0.8rem;
-          font-family: "proxima-nova", sans-serif;
+          font-size: 0.75rem;
           border-radius: 3px;
           background-color: rgb(0, 0, 0);
         }
         .inputs::placeholder {
-          font-weight: bold;
-          text-transform: uppercase;
+          font-family: "proxima-nova", sans-serif;
         }
         .inputs:focus,
         .inputs:active {
@@ -190,13 +187,25 @@ body {
           outline: none;
           box-shadow: 0 4px 8px 0 rgba(21, 21, 21, 0.2);
         }
-        fieldset {
+        #name {
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          gap: 0.5rem;
+          border: none;
+          padding: 0;
+
+          .inputs {
+            width: 9rem;
+          }
+        }
+        #buttons {
           display: flex;
           flex-direction: row;
           justify-content: center;
           gap: 10px;
           border: none;
-          padding-top: 20px;
+          padding-top: 10px;
 
           #confirm {
             background-color: transparent;
@@ -255,7 +264,7 @@ body {
     }
   }
   #confirm-reservation.active {
-    left: 0;
+    left: 0%;
   }
 
   #banner {
@@ -289,7 +298,7 @@ body {
       justify-content: center;
 
       p {
-        width: 30%;
+        width: max(30%, 400px);
         line-height: 1.5;
         font-family: "proxima-nova", sans-serif;
         color: #b1b1b1;
@@ -329,6 +338,49 @@ body {
     justify-content: space-between;
     position: relative;
 
+    #login-overlay {
+      display: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+      background-color: rgba(0, 0, 0, 0.85);
+
+      h3 {
+        /* font-family: "proxima-nova", sans-serif; */
+        font-family: "Playfair Display", serif;
+        color: white;
+        font-size: 1.8rem;
+        text-transform: uppercase;
+        font-weight: 100;
+      }
+      #login {
+        background-color: transparent;
+        border: 1px solid transparent;
+        width: 5.5rem;
+        height: 3rem;
+        transition: border 0.3s ease-in-out;
+        text-transform: uppercase;
+        font-family: "proxima-nova", sans-serif;
+        font-weight: bold;
+        color: white;
+        padding: 0;
+        margin: 0;
+        text-align: center;
+        line-height: 3.1rem;
+        cursor: pointer;
+      }
+      #login:hover {
+        border: 1px solid #c40d2e;
+      }
+    }
+    #login-overlay.active {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
     #reserve-a-table-bg {
       background-color: black;
       box-shadow: 3px 0px 7px 1px rgba(0, 0, 0, 0.48);
@@ -337,21 +389,23 @@ body {
       flex-direction: column;
       align-items: center;
 
-      h2 {
-        text-align: center;
-        margin: 0;
-        font-size: 2rem;
-        color: white;
-        font-family: "Playfair Display", serif;
-        text-transform: uppercase;
-        padding: 40px 0 40px 0;
-      }
-
       #reserve-a-table-side-panel {
         display: flex;
         flex-direction: column;
         width: 375px;
 
+        h2 {
+          text-align: center;
+          margin: 0;
+          font-size: 2rem;
+          color: white;
+          font-family: "Playfair Display", serif;
+          text-transform: uppercase;
+          padding: 40px 0 40px 0;
+        }
+        #datepicker-small {
+          display: none;
+        }
         h3 {
           text-align: left;
           margin: 0;
@@ -408,7 +462,7 @@ body {
       grid-template-rows: 1fr 1fr 1fr;
       grid-template-areas:
         "bigTable1 . bigTable2 smallTable3 . corner corner"
-        "bigTable5 . smallTableGroup . smallTable7 smallTable8 smallTable9"
+        "bigTable4 . smallTableGroup . smallTable7 smallTable8 smallTable9"
         "bigTable10 bigTable11 smallTable12 . bigTableGroup bigTableGroup bigTableGroup";
       justify-items: center;
       align-items: center;
@@ -463,7 +517,7 @@ body {
         background-size: 10px 10px;
       }
       .locked {
-        cursor: default;
+        cursor: not-allowed;
       }
       .locked:hover {
         background: none;
@@ -509,8 +563,7 @@ body {
       }
       .window[data-window-id="1"] {
         top: 21px;
-        right: 35rem;
-        /* transform: rotate(90deg) translate(0.4px); */
+        right: min(50%, 550px);
       }
       .big.table[data-table-id="2"] {
         grid-area: bigTable2;
@@ -565,16 +618,24 @@ body {
 
           svg {
             position: absolute;
-            right: 1.3rem;
+            right: max(1.35%, 12px);
             width: 150px;
             height: 150px;
             transform: rotate(-90deg);
           }
         }
       }
-      .big.table[data-table-id="5"] {
-        grid-area: bigTable5;
+      .big.table[data-table-id="4"] {
+        grid-area: bigTable4;
         transform: rotate(90deg);
+      }
+      #small-table-wrapper {
+        grid-area: smallTableGroup;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 30px;
+        width: 100%;
       }
       .small.table[data-table-id="7"] {
         grid-area: smallTable7;
@@ -593,8 +654,8 @@ body {
       }
       .window[data-window-id="3"] {
         flex-direction: column-reverse;
-        left: 45%;
         top: 720px;
+        left: max(45%, 100px);
       }
       .big.table[data-table-id="11"] {
         grid-area: bigTable11;
@@ -606,7 +667,7 @@ body {
       .window[data-window-id="2"] {
         flex-direction: column-reverse;
         top: 720px;
-        right: 12rem;
+        right: min(20%, 200px);
       }
       #big-table-wrapper {
         grid-area: bigTableGroup;
@@ -615,14 +676,6 @@ body {
         justify-content: center;
         gap: 20px;
         width: 80%;
-      }
-      #small-table-wrapper {
-        grid-area: smallTableGroup;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 30px;
-        width: 100%;
       }
     }
   }

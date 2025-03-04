@@ -52,6 +52,13 @@
         color: white;
         background-color: black;
       }
+      .locked {
+        cursor: not-allowed;
+      }
+      .locked:hover {
+        color: black;
+        background-color: var(--datepicker-bg-secondary);
+      }
     }
     .month-selector {
       display: flex;
@@ -129,6 +136,18 @@
     }
     .current-day:focus {
       background-color: var(--datepicker-primary-accent);
+    }
+    .locked {
+      cursor: not-allowed;
+    }
+    .locked:hover {
+      color: black;
+    }
+    .locked-faded {
+      cursor: not-allowed;
+    }
+    .locked-faded:hover {
+      color: var(--datepicker-text-secondary);
     }
   }
 }

@@ -1,0 +1,51 @@
+@media (max-width: 1150px) {
+  body {
+    #confirm-reservation {
+      width: 100%;
+    }
+    #reserve-a-table-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 130vh;
+
+      #reserve-a-table-bg {
+        width: 100%;
+        align-items: start;
+        position: sticky;
+        height: 30vh;
+
+        #reserve-a-table-side-panel {
+          width: auto;
+          padding: 50px;
+          gap: 20px;
+
+          h2 {
+            padding: 0;
+            text-align: left;
+          }
+          .datepicker {
+            display: none;
+          }
+          #datepicker-small {
+            display: inline-block;
+          }
+        }
+      }
+      #restaurant-layout {
+        height: 100vh;
+        width: 85%;
+
+        .window[data-window-id="1"] {
+          top: 255px;
+        }
+        .window[data-window-id="2"] {
+          top: 946px;
+        }
+        .window[data-window-id="3"] {
+          top: 946px;
+        }
+      }
+    }
+  }
+}

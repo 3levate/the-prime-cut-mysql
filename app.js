@@ -1,10 +1,16 @@
 const PORT = 8000;
 import express, { json, static as expressStatic } from "express";
 import { createConnection } from "mysql2/promise";
-const app = express();
 import { readFileSync, writeFileSync } from "fs";
 import { createServer } from "livereload";
 import connectLiveReload from "connect-livereload";
+import session from "express-session";
+import { MySQLStoreFactory } from "express-mysql-session";
+import dotenv from "dotenv";
+
+const app = express();
+
+dotenv.config();
 
 const liveReloadServer = createServer();
 liveReloadServer.watch("./app/");
@@ -12,12 +18,27 @@ liveReloadServer.watch("./public/");
 app.use(connectLiveReload());
 
 //mysql -u root -p
-const connection = await createConnection({
+const pool = await createPool({
   host: "localhost",
   user: "root",
   password: "",
   database: "the_prime_cut",
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
+const MySQLStore = MySQLStoreFactory(session);
+const sessionStore = new MySQLStore({}, pool);
+
+app.use(
+  session({
+    key: "the_prime_cut",
+    secret: process.env.SESSION_SECRET,
+    store: sessionStore,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 app.use(json());
 app.use("/js", expressStatic("./public/scripts"));
@@ -34,7 +55,7 @@ app.get("/reservations", async (request, response) => {
   //TODO
   const { date } = request.query;
   try {
-    const [reservations] = await connection.execute(
+    const [reservations] = await pool.execute(
       `SELECT 
         table_number,
         GROUP_CONCAT(hour SEPARATOR ', ') AS hours
@@ -53,34 +74,43 @@ app.get("/reservations", async (request, response) => {
 
 app.post("/reservations", async (request, response) => {
   try {
-    const { name, email, date, time, table } = request.body;
-    await connection.beginTransaction();
+    const { firstName, lastName, email, phoneNumber, date, time, table } = request.body;
+    await pool.beginTransaction();
 
     //FIXME
-    const [guestInsertResult] = await connection.execute(`
-      INSERT INTO guests (first_name, email)
-      SELECT '${name}', '${email}'
+    const [guestInsertResult] = await pool.execute(`
+      INSERT INTO guests (first_name, last_name, email, phone_number)
+      SELECT '${firstName}','${lastName}', '${email}', '${phoneNumber}'
       WHERE NOT EXISTS (
         SELECT 1 
         FROM guests 
-        WHERE first_name = '${name}'
-          AND email = '${email}');
+        WHERE first_name = '${firstName}'
+          AND last_name = '${lastName}'
+          AND email = '${email}'
+          AND phone_number = '${phoneNumber}');
     `);
     console.log(guestInsertResult);
-    const [reservationInsertResult] = await connection.execute(`
+
+    console.log(
+      `guest: ${guestInsertResult.insertId}, table: ${table}, date: ${date}, time: ${time}`
+    );
+
+    const [reservationInsertResult] = await pool.execute(`
       INSERT INTO reservations (guest_id, table_number, date, hour)
       VALUES (${guestInsertResult.insertId}, ${table}, '${date}', ${time});
     `);
     console.log(reservationInsertResult);
 
-    await connection.commit();
+    await pool.commit();
     response.status(200).send("Successfully updated reservations.");
   } catch (error) {
-    await connection.rollback();
+    await pool.rollback();
     console.error("Error updating reservations, transaction rolled back.", error);
     response.status(500).send("Error updating reservations, transaction rolled back.", error);
   }
 });
+
+app.post("/login", (request, response) => {});
 
 // for resoure not found (404)
 app.use((request, response, next) => {

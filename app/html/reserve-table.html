@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/css/footer.css" />
     <link rel="stylesheet" href="/css/datepicker.css" />
     <link rel="stylesheet" href="/css/newsletter.css" />
+    <link rel="stylesheet" href="/css/reserve-table-small.css" />
 
     <!-- must be loaded alphabetically -->
     <link
@@ -50,14 +51,24 @@
           <p id="success-message"></p>
         </div>
         <form id="reservation-form" onsubmit="return storeReservation(event)">
-          <input
-            type="text"
-            name="name"
-            id="name"
-            placeholder="Name"
-            class="inputs"
-            required
-            autocomplete="off" />
+          <fieldset id="name">
+            <input
+              type="text"
+              name="first-name"
+              id="first-name"
+              placeholder="First Name"
+              class="inputs"
+              required
+              autocomplete="off" />
+            <input
+              type="text"
+              name="last-name"
+              id="last-name"
+              placeholder="Last Name"
+              class="inputs"
+              required
+              autocomplete="off" />
+          </fieldset>
           <input
             type="email"
             name="email"
@@ -66,7 +77,14 @@
             class="inputs"
             required
             autocomplete="off" />
-          <fieldset>
+          <input
+            type="tel"
+            name="phone-number"
+            id="phone-number"
+            placeholder="(___) ___ ____"
+            class="inputs"
+            autocomplete="off" />
+          <fieldset id="buttons">
             <input type="reset" value="Cancel" id="cancel" />
             <input type="submit" value="Confirm" id="confirm" />
           </fieldset>
@@ -96,9 +114,15 @@
     </div>
 
     <div id="reserve-a-table-container">
+      <div id="login-overlay">
+        <h3>Please log in to make a reservation</h3>
+        <button id="login">Log In</button>
+      </div>
+
       <div id="reserve-a-table-bg">
-        <h2>Make a reservation</h2>
         <div id="reserve-a-table-side-panel">
+          <h2>Make a reservation</h2>
+          <input type="date" id="datepicker-small" onchange="smallDatePickerClick(event)" />
           <div class="datepicker">
             <div class="datepicker-top">
               <div class="datepicker-quick-pick-group">
@@ -126,7 +150,7 @@
               <span class="day-name">Sun</span>
             </div>
           </div>
-          <h3>Select a time</h3>
+          <h3 id="select-time-text">Select a time</h3>
           <div id="timeslots-container"></div>
         </div>
       </div>
@@ -573,7 +597,7 @@
             </svg>
           </div>
         </div>
-        <svg class="big table" data-table-id="5" viewBox="0 0 70 60">
+        <svg class="big table" data-table-id="4" viewBox="0 0 70 60">
           <g
             id="svg_21"
             transform="translate(1 0) translate(0 1) translate(0 -1.03) translate(-2.53 0) translate(2.25 0) translate(-1.5 -0.25) matrix(0.42085 0 0 0.42085 2.77746 1.43587)">
@@ -689,7 +713,7 @@
           </g>
         </svg>
         <div id="small-table-wrapper">
-          <svg class="small table" data-table-id="4" viewBox="0 0 56 25">
+          <svg class="small table" data-table-id="5" viewBox="0 0 56 25">
             <g
               id="svg_51"
               transform="translate(0 -0.25) translate(0 -0.25) translate(0 -0.25) translate(0 -0.25) translate(0.25 0) translate(-0.25 0) translate(0.25 0) matrix(1 0 0 1 1.75 2.25)">

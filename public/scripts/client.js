@@ -32,12 +32,15 @@ async function highlightReservedTables(date) {
       if (reservedHours.length == TOTAL_HOURS_RESTAURANT_OPEN_DAILY) {
         table.classList.remove("some-availability");
         table.classList.add("reserved");
+        table.classList.add("locked");
       } else if (reservedHours.length < TOTAL_HOURS_RESTAURANT_OPEN_DAILY) {
         table.classList.remove("reserved");
+        table.classList.remove("locked");
         table.classList.add("some-availability");
       }
     } else {
       // colour tables green or just leave as outline?
+      table.classList.remove("locked");
       table.classList.remove("reserved");
       table.classList.remove("some-availability");
     }
@@ -67,6 +70,12 @@ async function addAvailableTableTimeslots(selectedTable) {
   }
 }
 
+function updateSelectTimeText(tableNumber) {
+  document.getElementById(
+    "select-time-text"
+  ).textContent = `Select a time for table no. ${tableNumber}`;
+}
+
 async function getReservedHoursByTableNumber(tableNum) {
   return await reservations
     .find((tableReservation) => tableReservation.table_number == tableNum)
@@ -80,6 +89,11 @@ function createTimeslot(hour, timeslotsContainer) {
   timeslot.setAttribute("data-hour-id", hour);
   timeslot.textContent = `${hour}:00 PM`;
   timeslot.onclick = (event) => {
+    if (!GLOBAL_STATE_SELECTED_TABLE) {
+      alert("Please select a table first.");
+      return;
+    }
+
     GLOBAL_STATE_SELECTED_TIMESLOT = event.target.dataset.hourId;
     openConfirmationWindow();
   };
@@ -192,6 +206,8 @@ function createDayNumber(dataDayNummber) {
   dayNumber.textContent = dataDayNummber;
   dayNumber.setAttribute("data-day-number", dataDayNummber);
   dayNumber.onclick = (event) => {
+    if (GLOBAL_STATE_SELECTED_TABLE) return;
+
     GLOBAL_STATE_CURRENT_MONTH.setDate(event.target.textContent);
     highlightReservedTables(GLOBAL_STATE_CURRENT_MONTH.toISOString().split("T")[0]);
 
@@ -229,6 +245,13 @@ function weekendFocus() {
 }
 
 function updateDate(date) {
+  if (GLOBAL_STATE_SELECTED_TABLE) {
+    alert(
+      "You have already selected a table. Please reload the page if you wish to view another day."
+    );
+    return;
+  }
+
   GLOBAL_STATE_CURRENT_MONTH = date;
   setDatePickerMonth();
   document
@@ -238,24 +261,30 @@ function updateDate(date) {
 }
 
 async function storeReservation(event) {
-  const { name, email } = Object.fromEntries(new FormData(event.target).entries());
-
-  console.log("table -1", GLOBAL_STATE_SELECTED_TABLE - 1);
+  const {
+    "first-name": firstName,
+    "last-name": lastName,
+    email,
+    "phone-number": phoneNumber,
+  } = Object.fromEntries(new FormData(event.target).entries());
 
   try {
+    console.log("global state selected table", GLOBAL_STATE_SELECTED_TABLE);
     const response = await fetch("http://localhost:8000/reservations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name,
+        firstName,
+        lastName,
         email,
+        phoneNumber,
         date: GLOBAL_STATE_CURRENT_MONTH.toISOString().split("T")[0],
         time: GLOBAL_STATE_SELECTED_TIMESLOT,
-        table: GLOBAL_STATE_SELECTED_TABLE - 1,
+        table: GLOBAL_STATE_SELECTED_TABLE,
       }),
     });
     console.log("response", response);
-    showSuccessScreen(name, email, response);
+    showSuccessScreen(firstName, response);
     return false;
   } catch (error) {
     console.log(error);
@@ -264,12 +293,14 @@ async function storeReservation(event) {
   }
 }
 
-function showSuccessScreen(name, email, response) {
+function showSuccessScreen(firstName, response) {
   console.log("showSuccessScreen called", response);
   document.getElementById("reservation-form").classList.add("inactive");
   document.getElementById("reservation-success").classList.add("active");
   document.getElementById("reservation-status").textContent = "Reservation Confirmed";
-  document.getElementById("success-message").textContent = `We look forward to seeing you ${name}!`;
+  document.getElementById(
+    "success-message"
+  ).textContent = `We look forward to seeing you ${firstName}!`;
 }
 
 function handleTableSelection(selectedTable) {
@@ -277,11 +308,27 @@ function handleTableSelection(selectedTable) {
   selectedTable.classList.add("selected");
   GLOBAL_STATE_SELECTED_TABLE = selectedTable.dataset.tableId;
 
-  //signal to the user that they can no longer select the tables
+  //signal to the user that they can no longer select another table/date
   document.querySelectorAll(".table").forEach((table) => {
     console.log("table", table);
     table.classList.add("locked");
   });
+  document.querySelectorAll(".quick-date-pick").forEach((datePick) => {
+    datePick.classList.add("locked");
+  });
+  document.querySelectorAll(".day-number:not(.faded)").forEach((day) => {
+    day.classList.add("locked");
+  });
+  document.querySelectorAll(".day-number.faded").forEach((day) => {
+    day.classList.add("locked-faded");
+  });
+}
+
+function smallDatePickerClick(event) {
+  if (GLOBAL_STATE_SELECTED_TABLE || !event.target.value) return;
+
+  GLOBAL_STATE_CURRENT_MONTH = new Date(event.target.value);
+  highlightReservedTables(GLOBAL_STATE_CURRENT_MONTH.toISOString().split("T")[0]);
 }
 
 //default to showing today's reservations
@@ -293,11 +340,25 @@ document
 
 document.querySelectorAll(".table").forEach((table) => {
   table.addEventListener("mouseenter", (event) => {
-    addAvailableTableTimeslots(event.target.dataset.tableId); //automatically converted to camel case from kebab case
+    const tableNumber = event.target.dataset.tableId;
+    addAvailableTableTimeslots(tableNumber); //automatically converted to camel case from kebab case
+    updateSelectTimeText(tableNumber);
   });
 
   table.addEventListener("click", (event) => {
-    if (table.classList.contains("reserved") || GLOBAL_STATE_SELECTED_TABLE) return;
+    if (GLOBAL_STATE_SELECTED_TABLE) {
+      alert(
+        "You have already selected a table. Please reload the page if you wish to select a different table."
+      );
+      return;
+    } else if (table.classList.contains("reserved")) {
+      alert(
+        `This table has no more timeslots remaining on ${
+          GLOBAL_STATE_CURRENT_MONTH.toISOString().split("T")[0]
+        }. Please choose another day.`
+      );
+      return;
+    }
 
     handleTableSelection(event.currentTarget);
   });
@@ -307,3 +368,5 @@ document.querySelectorAll(".table").forEach((table) => {
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
 });
+
+isUserAuthenticated();
