@@ -1,16 +1,16 @@
 const PORT = 8000;
 import express, { json, static as expressStatic } from "express";
-import { createConnection } from "mysql2/promise";
-import { readFileSync, writeFileSync } from "fs";
+import { createPool } from "mysql2/promise";
+import { readFileSync } from "fs";
 import { createServer } from "livereload";
 import connectLiveReload from "connect-livereload";
 import session from "express-session";
-import { MySQLStoreFactory } from "express-mysql-session";
+import MySQLStoreFactory from "express-mysql-session";
 import dotenv from "dotenv";
 
-const app = express();
-
 dotenv.config();
+
+const app = express();
 
 const liveReloadServer = createServer();
 liveReloadServer.watch("./app/");
@@ -65,52 +65,130 @@ app.get("/reservations", async (request, response) => {
       [date]
     );
     console.log(`sending reservations for date: ${date}`, reservations);
-    response.status(200).send(reservations);
+    response.status(200).send(JSON.stringify(reservations));
   } catch (error) {
     console.error(`Error sending reservations for date: ${date}`, error);
-    response.status(500).send(`Error sending reservations for date: ${date}`, error);
+    response
+      .status(500)
+      .send(JSON.stringify(`Error sending reservations for date: ${date}`, error));
   }
 });
 
 app.post("/reservations", async (request, response) => {
+  let connection;
   try {
-    const { firstName, lastName, email, phoneNumber, date, time, table } = request.body;
-    await pool.beginTransaction();
+    const { date, time, table } = request.body;
+    const { userId } = request.session;
+    connection = await pool.getConnection();
 
-    //FIXME
-    const [guestInsertResult] = await pool.execute(`
-      INSERT INTO guests (first_name, last_name, email, phone_number)
-      SELECT '${firstName}','${lastName}', '${email}', '${phoneNumber}'
-      WHERE NOT EXISTS (
-        SELECT 1 
-        FROM guests 
-        WHERE first_name = '${firstName}'
-          AND last_name = '${lastName}'
-          AND email = '${email}'
-          AND phone_number = '${phoneNumber}');
-    `);
-    console.log(guestInsertResult);
-
-    console.log(
-      `guest: ${guestInsertResult.insertId}, table: ${table}, date: ${date}, time: ${time}`
-    );
-
-    const [reservationInsertResult] = await pool.execute(`
+    await connection.beginTransaction();
+    const [reservationInsertResult] = await connection.execute(
+      `
       INSERT INTO reservations (guest_id, table_number, date, hour)
-      VALUES (${guestInsertResult.insertId}, ${table}, '${date}', ${time});
-    `);
+      VALUES (?, ?, ?, ?);
+    `,
+      [userId, table, date, time]
+    );
     console.log(reservationInsertResult);
+    await connection.commit();
 
-    await pool.commit();
-    response.status(200).send("Successfully updated reservations.");
+    response.status(200).send(JSON.stringify("Successfully updated reservations"));
   } catch (error) {
-    await pool.rollback();
-    console.error("Error updating reservations, transaction rolled back.", error);
-    response.status(500).send("Error updating reservations, transaction rolled back.", error);
+    await connection.rollback();
+
+    console.error(`${error.name} updating reservations, transaction rolled back`, error);
+    response
+      .status(500)
+      .send(JSON.stringify(`${error.name} updating reservations, transaction rolled back`, error));
+  } finally {
+    connection.release();
   }
 });
 
-app.post("/login", (request, response) => {});
+app.post("/login", async (request, response) => {
+  const { email: requestEmail, password: requestPassword } = request.body;
+  const [loginQueryResult] = await pool.execute(
+    `
+    SELECT ID, password
+    FROM guests
+    WHERE email = ?;
+  `,
+    [requestEmail]
+  );
+  console.log("loginQueryResult", loginQueryResult);
+
+  if (loginQueryResult.length > 0) {
+    const guest = loginQueryResult[0];
+
+    if (guest.password == requestPassword) {
+      console.log("passwords match");
+      request.session.userId = guest.ID;
+      response.status(200).send(JSON.stringify("Login Successful", guest.ID));
+    } else {
+      response.status(401).send(JSON.stringify("Login Failed, incorrect password"));
+    }
+  } else {
+    response.status(404).send(JSON.stringify("Error: Guest not found"));
+  }
+});
+
+app.post("/signup", async (request, response) => {
+  let connection;
+  try {
+    connection = await pool.getConnection();
+    const { firstName, lastName, email, nullPhoneNumber, password } = request.body;
+    for (const key in request.body) {
+      console.log(key, request.body[key]);
+    }
+
+    await connection.beginTransaction();
+    const [guestInsertResult] = await connection.execute(
+      `INSERT INTO guests (first_name, last_name, email, phone_number, password)
+       VALUES (?, ?, ?, ?, ?);`,
+      [firstName, lastName, email, nullPhoneNumber, password]
+    );
+    await connection.commit();
+
+    request.session.userId = guestInsertResult.insertId;
+    response
+      .status(200)
+      .send(JSON.stringify("Successfully created account and logged in", guestInsertResult));
+  } catch (error) {
+    await connection.rollback();
+
+    console.error(`${error.name} while creating account, transaction rolled back`, error);
+    response
+      .status(500)
+      .send(JSON.stringify(`${error.name} while creating account, transaction rolled back`, error));
+  } finally {
+    connection.release();
+  }
+});
+
+app.get("/isauthenticated", (request, response) => {
+  request?.session?.userId
+    ? response.status(200).send(JSON.stringify("User has valid session"))
+    : response.status(401).send(JSON.stringify("Session does not exist or is invalid"));
+});
+
+app.get("/get-guest-details", async (request, response) => {
+  const { userId } = request.session;
+  try {
+    const [guest] = await pool.execute(
+      `
+      SELECT *
+      FROM guests
+      WHERE ID = ?;
+      `,
+      [userId]
+    );
+    console.log("guest", guest[0]);
+    response.status(200).send(JSON.stringify(guest[0]));
+  } catch (error) {
+    console.error(`${error.name} while getting guest details`, error);
+    response.status(500).send(JSON.stringify(`${error.name} while getting guest details`, error));
+  }
+});
 
 // for resoure not found (404)
 app.use((request, response, next) => {

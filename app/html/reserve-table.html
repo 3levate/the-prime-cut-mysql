@@ -51,39 +51,6 @@
           <p id="success-message"></p>
         </div>
         <form id="reservation-form" onsubmit="return storeReservation(event)">
-          <fieldset id="name">
-            <input
-              type="text"
-              name="first-name"
-              id="first-name"
-              placeholder="First Name"
-              class="inputs"
-              required
-              autocomplete="off" />
-            <input
-              type="text"
-              name="last-name"
-              id="last-name"
-              placeholder="Last Name"
-              class="inputs"
-              required
-              autocomplete="off" />
-          </fieldset>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            placeholder="Email"
-            class="inputs"
-            required
-            autocomplete="off" />
-          <input
-            type="tel"
-            name="phone-number"
-            id="phone-number"
-            placeholder="(___) ___ ____"
-            class="inputs"
-            autocomplete="off" />
           <fieldset id="buttons">
             <input type="reset" value="Cancel" id="cancel" />
             <input type="submit" value="Confirm" id="confirm" />
@@ -116,7 +83,7 @@
     <div id="reserve-a-table-container">
       <div id="login-overlay">
         <h3>Please log in to make a reservation</h3>
-        <button id="login">Log In</button>
+        <a id="login" href="/html/login.html">Log In</a>
       </div>
 
       <div id="reserve-a-table-bg">

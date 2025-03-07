@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+
+    <link rel="icon" type="image/x-icon" href="/assets/meat.ico" />
+
+    <link rel="stylesheet" href="/css/login.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=chevron_left,chevron_right,event,keyboard_arrow_down,schedule,table_bar"
+      rel="stylesheet" />
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Newa&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Newa&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+    </style>
+  </head>
+  <body>
+    <div id="confirm-reservation">
+      <div id="confirm-reservation-container">
+        <div id="header-container">
+          <img src="/assets/theprimecut_white_cropped.png" alt="The Prime Cut" id="logo" />
+          <div id="line"></div>
+          <h1 id="reservation-status">Login</h1>
+        </div>
+        <div id="reservation-success">
+          <p id="success-message"></p>
+        </div>
+        <form id="reservation-form" method="post" onsubmit="return authenticateGuest(event)">
+          <input id="form-type" type="hidden" name="form-type" value="login" />
+          <fieldset id="name">
+            <input
+              type="text"
+              name="first-name"
+              id="first-name"
+              placeholder="First Name"
+              class="inputs hidden"
+              autocomplete="off" />
+            <input
+              type="text"
+              name="last-name"
+              id="last-name"
+              placeholder="Last Name"
+              class="inputs hidden"
+              autocomplete="off" />
+          </fieldset>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email"
+            class="inputs"
+            required
+            autocomplete="off" />
+          <input
+            type="tel"
+            name="phone-number"
+            id="phone-number"
+            placeholder="(___) ___ ____"
+            class="inputs hidden"
+            autocomplete="off" />
+          <input
+            type="password"
+            name="password"
+            id="password"
+            placeholder="Password"
+            class="inputs"
+            required
+            autocomplete="off" />
+          <fieldset id="buttons">
+            <input type="reset" value="Cancel" id="cancel" />
+            <input type="submit" value="Confirm" id="confirm" />
+          </fieldset>
+        </form>
+      </div>
+    </div>
+    <script src="/js/login.js"></script>
+  </body>
+</html>

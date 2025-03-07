@@ -261,30 +261,19 @@ function updateDate(date) {
 }
 
 async function storeReservation(event) {
-  const {
-    "first-name": firstName,
-    "last-name": lastName,
-    email,
-    "phone-number": phoneNumber,
-  } = Object.fromEntries(new FormData(event.target).entries());
-
   try {
     console.log("global state selected table", GLOBAL_STATE_SELECTED_TABLE);
     const response = await fetch("http://localhost:8000/reservations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        phoneNumber,
         date: GLOBAL_STATE_CURRENT_MONTH.toISOString().split("T")[0],
         time: GLOBAL_STATE_SELECTED_TIMESLOT,
         table: GLOBAL_STATE_SELECTED_TABLE,
       }),
     });
     console.log("response", response);
-    showSuccessScreen(firstName, response);
+    showSuccessScreen(response);
     return false;
   } catch (error) {
     console.log(error);
@@ -293,7 +282,8 @@ async function storeReservation(event) {
   }
 }
 
-function showSuccessScreen(firstName, response) {
+async function showSuccessScreen(response) {
+  const firstName = await getFirstName();
   console.log("showSuccessScreen called", response);
   document.getElementById("reservation-form").classList.add("inactive");
   document.getElementById("reservation-success").classList.add("active");
@@ -301,6 +291,17 @@ function showSuccessScreen(firstName, response) {
   document.getElementById(
     "success-message"
   ).textContent = `We look forward to seeing you ${firstName}!`;
+}
+
+async function getFirstName() {
+  try {
+    const response = await fetch("/get-guest-details");
+    const { first_name: firstName } = await response.json();
+    return firstName;
+  } catch (error) {
+    console.log(`${error.name} getting guest details`, error);
+    return null;
+  }
 }
 
 function handleTableSelection(selectedTable) {
@@ -329,6 +330,22 @@ function smallDatePickerClick(event) {
 
   GLOBAL_STATE_CURRENT_MONTH = new Date(event.target.value);
   highlightReservedTables(GLOBAL_STATE_CURRENT_MONTH.toISOString().split("T")[0]);
+}
+
+async function isUserAuthenticated() {
+  try {
+    const response = await fetch("/isauthenticated");
+    console.log("isAuthenticated", response);
+    if (response.status == 401) {
+      showLoginOverlay();
+    }
+  } catch (error) {
+    console.log(`${error.name} in isAuthenticated`, error);
+  }
+}
+
+function showLoginOverlay() {
+  document.getElementById("login-overlay").classList.add("active");
 }
 
 //default to showing today's reservations

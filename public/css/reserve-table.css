@@ -369,6 +369,8 @@ body {
         text-align: center;
         line-height: 3.1rem;
         cursor: pointer;
+        font-size: 0.8rem;
+        text-decoration: none;
       }
       #login:hover {
         border: 1px solid #c40d2e;
