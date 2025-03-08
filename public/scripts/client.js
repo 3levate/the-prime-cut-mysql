@@ -332,20 +332,27 @@ function smallDatePickerClick(event) {
   highlightReservedTables(GLOBAL_STATE_CURRENT_MONTH.toISOString().split("T")[0]);
 }
 
-async function isUserAuthenticated() {
-  try {
-    const response = await fetch("/isauthenticated");
-    console.log("isAuthenticated", response);
-    if (response.status == 401) {
-      showLoginOverlay();
-    }
-  } catch (error) {
-    console.log(`${error.name} in isAuthenticated`, error);
-  }
-}
-
 function showLoginOverlay() {
   document.getElementById("login-overlay").classList.add("active");
+}
+
+async function logout() {
+  try {
+    const response = await fetch("/logout", {
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      alert("Successfully logged out");
+      window.location.reload();
+    } else {
+      //if server-side error
+      alert("Error logging out, please try again.");
+    }
+  } catch (error) {
+    console.error(`${error.name} while logging out`, error);
+    alert("Error logging out, please try again.");
+  }
 }
 
 //default to showing today's reservations
@@ -385,5 +392,3 @@ document.querySelectorAll(".table").forEach((table) => {
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
 });
-
-isUserAuthenticated();

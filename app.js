@@ -190,6 +190,21 @@ app.get("/get-guest-details", async (request, response) => {
   }
 });
 
+app.delete("/logout", (request, response) => {
+  request.session.destroy((error) => {
+    if (error) {
+      console.error(`${error.name} while destroying session`, error);
+      return response
+        .status(500)
+        .json({ message: `${error.name} while destroying session`, error: error });
+    } else {
+      response.clearCookie("connect.sid");
+      console.log("Successfully logged out user");
+      return response.status(200).json({ message: "Successfully logged out" });
+    }
+  });
+});
+
 // for resoure not found (404)
 app.use((request, response, next) => {
   response.status(404).send(readFileSync("./app/html/404.html", "utf8"));

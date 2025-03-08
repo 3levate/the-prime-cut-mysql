@@ -2,9 +2,19 @@
   <img src="/assets/theprimecut_white_cropped.png" id="logo" alt="The Prime Cut" />
 </a>
 <ul id="nav-list">
-  <li onclick="">Menus</li>
-  <li onclick="">Locations</li>
-  <li onclick="">Reserve A Table</li>
-  <li onclick="">Our Team</li>
-  <li onclick="">Careers</li>
+  <li class="underline" onclick="">Menus</li>
+  <li class="underline" onclick="">Locations</li>
+  <li class="underline" onclick="">Reserve A Table</li>
+  <li class="underline" onclick="">Our Team</li>
+  <li class="underline" onclick="">Careers</li>
+  <li id="profile">
+    <span class="material-symbols-outlined"> account_circle </span>
+    <ul id="dropdown">
+      <li id="login" onclick="window.location.href = '/html/login.html'">Login</li>
+      <li id="logout" onclick="logout()">Logout</li>
+      <li id="signup" onclick="window.location.href = '/html/login.html?form-type=signup'">
+        Sign Up
+      </li>
+    </ul>
+  </li>
 </ul>

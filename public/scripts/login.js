@@ -5,6 +5,8 @@ const RESPONSE_STATUSES = {
   401: showIncorrectPasswordErrorMessage,
   404: convertToSignupForm,
 };
+const urlParams = new URLSearchParams(window.location.search);
+const requestFormType = urlParams.get("form-type");
 
 async function authenticateGuest(event) {
   event.preventDefault();
@@ -58,4 +60,8 @@ function convertToSignupForm() {
   document.getElementById("phone-number").classList.remove("hidden");
   document.getElementById("reservation-status").textContent = "Sign Up";
   document.getElementById("form-type").value = "signup";
+}
+
+if (requestFormType == "signup") {
+  convertToSignupForm();
 }
