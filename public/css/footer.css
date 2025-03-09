@@ -28,8 +28,8 @@
   .footer-row.bottom {
     display: flex;
     flex-direction: row-reverse;
-    justify-content: center;
-    gap: 33vw;
+    justify-content: space-between;
+    padding: 0 150px 0 150px;
     font-weight: 600;
     font-size: 12px;
 

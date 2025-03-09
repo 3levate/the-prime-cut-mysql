@@ -10,12 +10,12 @@
 
 .datepicker {
   font-family: "Inter", sans-serif;
-  /* font-family: "Playfair Display", serif; */
   line-height: 1.5;
   background-color: var(--datepicker-bg-tertiary);
   color: var(--datepicker-text-primary);
   border-radius: 1px;
   max-width: 375px;
+  min-width: 350px;
   box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.2) 0 5px 10px 0 rgba(0, 0, 0, 0.2);
   padding: 1.5rem;
   box-sizing: border-box;

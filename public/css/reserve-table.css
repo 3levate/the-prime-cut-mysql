@@ -338,6 +338,10 @@ body {
     }
   }
 
+  #unsupported-screen-size {
+    display: none;
+  }
+
   #reserve-a-table-container {
     width: 100%;
     height: 100vh;

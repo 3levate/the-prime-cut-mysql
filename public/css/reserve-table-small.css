@@ -1,4 +1,4 @@
-@media (max-width: 1150px) {
+@media (max-width: 1350px) {
   body {
     #confirm-reservation {
       width: 100%;
@@ -52,6 +52,7 @@
       }
 
       #restaurant-layout-container {
+        width: 100%;
         #login-overlay {
           width: 100%;
           height: 85%;
@@ -78,6 +79,26 @@
           }
         }
       }
+    }
+  }
+}
+
+@media (max-width: 780px) {
+  body {
+    #unsupported-screen-size {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: "proxima-nova", sans-serif;
+      font-weight: 300;
+      font-size: 1.3rem;
+      background-color: black;
+      color: white;
+      margin: 0;
+      padding: 50px;
+    }
+    #reserve-a-table-container {
+      display: none;
     }
   }
 }
