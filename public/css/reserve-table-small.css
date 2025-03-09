@@ -83,6 +83,12 @@
   }
 }
 
+@media (max-width: 1200px) {
+  body #footer .footer-row.bottom {
+    padding: 0 7% 0 7%;
+  }
+}
+
 @media (max-width: 780px) {
   body {
     #unsupported-screen-size {
@@ -99,6 +105,10 @@
     }
     #reserve-a-table-container {
       display: none;
+    }
+
+    #footer .footer-row.bottom {
+      padding: 0 10px 0 10px;
     }
   }
 }

@@ -1,3 +1,7 @@
+* {
+  scrollbar-color: #505050 transparent;
+}
+
 #borders {
   position: absolute;
   right: 0;
@@ -43,6 +47,20 @@
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
+}
+
+/* Chrome - Hides track and width/height set for vertical/horizontal scrollbars */
+::-webkit-scrollbar {
+  background-color: transparent;
+  width: 7px;
+  height: 7px;
+}
+
+/* Chrome - Changes thumb color and rounds scrollbar edges, in Chrome any 
+scrollbar changes disables default styling and rounding so corners appear squared */
+::-webkit-scrollbar-thumb {
+  background-color: hsla(0, 0%, 46%, 0.5);
+  border-radius: 8px;
 }
 
 html,
@@ -353,7 +371,7 @@ body {
     #reserve-a-table-bg {
       background-color: black;
       box-shadow: 3px 0px 7px 1px rgba(0, 0, 0, 0.48);
-      width: 30%;
+      width: min(30%, 450px);
       max-width: 600px;
       display: flex;
       flex-direction: column;
@@ -428,7 +446,7 @@ body {
     }
 
     #restaurant-layout-container {
-      width: 70%;
+      width: max(70%, calc(100% - 450px));
       height: 100%;
       display: flex;
       justify-content: center;
@@ -437,7 +455,8 @@ body {
       #login-overlay {
         display: none;
         position: absolute;
-        width: 75%;
+        width: max(70%, calc(100% - 450px));
+        height: 100%;
         z-index: 9998;
         background-color: rgba(0, 0, 0, 0.85);
 
