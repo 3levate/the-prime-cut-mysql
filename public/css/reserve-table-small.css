@@ -7,23 +7,40 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      height: 130vh;
+      align-items: center;
+      height: 120vh;
 
       #reserve-a-table-bg {
-        width: 100%;
+        max-width: 100%;
+        width: calc(100% - 60px);
+        justify-content: center;
         align-items: start;
         position: sticky;
-        height: 30vh;
+        top: 0;
+        z-index: 9999;
+        height: 25vh;
+        padding-left: 60px;
 
+        h2 {
+          padding: 0 0 20px 0;
+          text-align: left;
+        }
         #reserve-a-table-side-panel {
           width: auto;
-          padding: 50px;
-          gap: 20px;
+          gap: 50px;
           flex-direction: row;
+          justify-content: start;
+          align-items: center;
+          height: 50px;
 
-          h2 {
+          h3 {
             padding: 0;
-            text-align: left;
+          }
+          #datepicker-small {
+            padding: 10px;
+          }
+          #timeslots-container {
+            padding: 0;
           }
           .datepicker {
             display: none;
@@ -33,18 +50,32 @@
           }
         }
       }
-      #restaurant-layout {
-        height: 100vh;
-        width: 85%;
 
-        .window[data-window-id="1"] {
-          top: 255px;
+      #restaurant-layout-container {
+        #login-overlay {
+          width: 100%;
+          height: 85%;
         }
-        .window[data-window-id="2"] {
-          top: 946px;
-        }
-        .window[data-window-id="3"] {
-          top: 946px;
+
+        #restaurant-layout {
+          height: 85%;
+          width: 85%;
+
+          .window[data-window-id="1"] {
+            top: 222px;
+            right: min(60%, 600px);
+          }
+          #corner #door {
+            top: 39%;
+          }
+          .window[data-window-id="2"] {
+            bottom: 22px;
+            right: min(20%, 200px);
+          }
+          .window[data-window-id="3"] {
+            bottom: 22px;
+            left: max(20%, 200px);
+          }
         }
       }
     }

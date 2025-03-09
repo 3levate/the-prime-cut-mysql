@@ -75,8 +75,8 @@
             <span class="material-symbols-outlined">table_bar</span><span class="info"></span>
           </div>
         </div>
-        <div id="reservation-success">
-          <p id="success-message"></p>
+        <div id="message-container">
+          <p id="message"></p>
         </div>
         <form id="reservation-form" onsubmit="return storeReservation(event)">
           <fieldset id="buttons">
@@ -113,14 +113,9 @@
     </div>
 
     <div id="reserve-a-table-container">
-      <div id="login-overlay">
-        <h3>Please log in to make a reservation</h3>
-        <a id="login" href="/html/login.html">Log In</a>
-      </div>
-
       <div id="reserve-a-table-bg">
+        <h2>Make a reservation</h2>
         <div id="reserve-a-table-side-panel">
-          <h2>Make a reservation</h2>
           <h3>
             <span class="material-symbols-outlined">table_bar</span>
             &nbsp;Table No.&nbsp;<span id="table-number-heading"></span>
@@ -158,6 +153,10 @@
       </div>
 
       <div id="restaurant-layout-container">
+        <div id="login-overlay">
+          <h3>Please log in to make a reservation</h3>
+          <a id="login" href="/html/login.html">Log In</a>
+        </div>
         <div id="restaurant-layout">
           <svg class="big table" data-table-id="1" viewBox="0 0 70 60">
             <g

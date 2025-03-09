@@ -8,9 +8,11 @@
   font-family: "proxima-nova", sans-serif;
   z-index: 9999;
 }
+
 .show-borders * {
   border: 1px solid red !important;
 }
+
 @keyframes scroll-for-more {
   0% {
     opacity: 0;
@@ -37,9 +39,16 @@
     transform: translateY(10px);
   }
 }
+
 html {
   scroll-behavior: smooth;
   scrollbar-width: thin;
+}
+
+html,
+body {
+  /* #door is overflowing but needs to remain 150px width for svg to be at correct size */
+  overflow-x: hidden;
 }
 
 body {
@@ -245,10 +254,10 @@ body {
           }
         }
       }
-      #reservation-success {
+      #message-container {
         display: none;
 
-        #success-message {
+        #message {
           color: white;
           font-family: "proxima-nova", sans-serif;
           font-weight: 600;
@@ -337,74 +346,29 @@ body {
     flex-direction: row;
     position: relative;
 
-    #login-overlay {
-      display: none;
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 9999;
-      background-color: rgba(0, 0, 0, 0.85);
-
-      h3 {
-        /* font-family: "proxima-nova", sans-serif; */
-        font-family: "Playfair Display", serif;
-        color: white;
-        font-size: 1.8rem;
-        text-transform: uppercase;
-        font-weight: 100;
-      }
-      #login {
-        background-color: transparent;
-        border: 1px solid transparent;
-        width: 5.5rem;
-        height: 3rem;
-        transition: border 0.3s ease-in-out;
-        text-transform: uppercase;
-        font-family: "proxima-nova", sans-serif;
-        font-weight: bold;
-        color: white;
-        padding: 0;
-        margin: 0;
-        text-align: center;
-        line-height: 3.1rem;
-        cursor: pointer;
-        font-size: 0.8rem;
-        text-decoration: none;
-      }
-      #login:hover {
-        border: 1px solid #c40d2e;
-      }
-    }
-    #login-overlay.active {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
     #reserve-a-table-bg {
       background-color: black;
       box-shadow: 3px 0px 7px 1px rgba(0, 0, 0, 0.48);
-      width: 35%;
+      width: 30%;
       max-width: 600px;
       display: flex;
       flex-direction: column;
       align-items: center;
 
+      h2 {
+        text-align: center;
+        margin: 0;
+        font-size: 1.85rem;
+        color: white;
+        font-family: "Playfair Display", serif;
+        text-transform: uppercase;
+        padding: 15% 0 50px 0;
+      }
       #reserve-a-table-side-panel {
         display: flex;
         flex-direction: column;
         width: 375px;
 
-        h2 {
-          text-align: center;
-          margin: 0;
-          font-size: 1.85rem;
-          color: white;
-          font-family: "Playfair Display", serif;
-          text-transform: uppercase;
-          padding: 22% 0 60px 0;
-        }
         h3 {
           display: flex;
           align-items: center;
@@ -415,6 +379,8 @@ body {
           font-family: "proxima-nova", sans-serif;
           padding: 0 0 30px 0;
           text-transform: uppercase;
+          width: 145px;
+          text-wrap: nowrap;
         }
         #datepicker-small {
           display: none;
@@ -458,17 +424,61 @@ body {
     }
 
     #restaurant-layout-container {
-      width: 100%;
+      width: 70%;
       height: 100%;
       display: flex;
       justify-content: center;
       align-items: center;
 
+      #login-overlay {
+        display: none;
+        position: absolute;
+        width: 75%;
+        z-index: 9998;
+        background-color: rgba(0, 0, 0, 0.85);
+
+        h3 {
+          /* font-family: "proxima-nova", sans-serif; */
+          font-family: "Playfair Display", serif;
+          color: white;
+          font-size: 1.8rem;
+          text-transform: uppercase;
+          font-weight: 100;
+        }
+        #login {
+          background-color: transparent;
+          border: 1px solid transparent;
+          width: 5.5rem;
+          height: 3rem;
+          transition: border 0.3s ease-in-out;
+          text-transform: uppercase;
+          font-family: "proxima-nova", sans-serif;
+          font-weight: bold;
+          color: white;
+          padding: 0;
+          margin: 0;
+          text-align: center;
+          line-height: 3.1rem;
+          cursor: pointer;
+          font-size: 0.8rem;
+          text-decoration: none;
+        }
+        #login:hover {
+          border: 1px solid #c40d2e;
+        }
+      }
+      #login-overlay.active {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
       #restaurant-layout {
         margin: 0 5% 0 5%;
         border-radius: 1px;
         border: 10px solid black;
-        width: 100%;
+        width: 90%;
         height: 85%;
         display: grid;
         grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -575,7 +585,7 @@ body {
           transform: rotate(90deg);
         }
         .window[data-window-id="1"] {
-          top: 20px;
+          top: 23.5px;
           right: min(35%, 800px);
         }
         .big.table[data-table-id="2"] {
@@ -662,8 +672,9 @@ body {
         }
         .window[data-window-id="3"] {
           flex-direction: column-reverse;
-          bottom: 19px;
-          left: max(45%, 100px);
+          bottom: 23px;
+          /* left: max(39%, 500px); */
+          left: 39%;
         }
         .big.table[data-table-id="11"] {
           grid-area: bigTable11;
@@ -674,7 +685,7 @@ body {
         }
         .window[data-window-id="2"] {
           flex-direction: column-reverse;
-          bottom: 19px;
+          bottom: 23px;
           right: min(20%, 200px);
         }
         #big-table-wrapper {

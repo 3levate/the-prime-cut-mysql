@@ -73,6 +73,9 @@ body {
       .inputs.hidden {
         display: none;
       }
+      #buttons.hidden {
+        display: none;
+      }
       .inputs {
         padding: 5px 0 0 15px;
         width: 19.5rem;
@@ -150,10 +153,10 @@ body {
         }
       }
     }
-    #reservation-success {
+    #message-container {
       display: none;
 
-      #success-message {
+      #message {
         color: white;
         font-family: "proxima-nova", sans-serif;
         font-weight: 600;

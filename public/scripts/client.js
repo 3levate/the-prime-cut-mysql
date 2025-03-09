@@ -285,11 +285,9 @@ async function showSuccessScreen(response) {
   const firstName = await getFirstName();
   console.log("showSuccessScreen called", response);
   document.getElementById("reservation-form").classList.add("inactive");
-  document.getElementById("reservation-success").classList.add("active");
+  document.getElementById("message-container").classList.add("active");
   document.getElementById("reservation-status").textContent = "Reservation Confirmed";
-  document.getElementById(
-    "success-message"
-  ).textContent = `We look forward to seeing you ${firstName}!`;
+  document.getElementById("message").textContent = `We look forward to seeing you ${firstName}!`;
 }
 
 async function getFirstName() {
@@ -342,8 +340,7 @@ async function logout() {
     });
 
     if (response.ok) {
-      alert("Successfully logged out");
-      window.location.reload();
+      window.location.href = "/html/login.html?form-type=logout";
     } else {
       //if server-side error
       alert("Error logging out, please try again.");
@@ -367,6 +364,7 @@ function alignDoor() {
 //default to showing today's reservations
 setDatePickerMonth();
 highlightReservedTables(todayDateFormatted);
+document.getElementById("datepicker-small").value = todayDateFormatted;
 document
   .querySelector(`.day-number[data-day-number="${today.getDate()}"]`)
   .classList.add("clicked");

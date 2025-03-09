@@ -62,6 +62,16 @@ function convertToSignupForm() {
   document.getElementById("form-type").value = "signup";
 }
 
+function convertToLogoutForm() {
+  document.getElementById("reservation-form").classList.add("inactive");
+  document.getElementById("reservation-status").textContent = "Logout";
+  document.getElementById("message-container").classList.add("active");
+  document.getElementById("message").textContent = "We're sorry to see you go!";
+  document.getElementById("form-type").value = "logout";
+}
+
 if (requestFormType == "signup") {
   convertToSignupForm();
+} else if (requestFormType == "logout") {
+  convertToLogoutForm();
 }
