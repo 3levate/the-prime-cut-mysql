@@ -361,6 +361,16 @@ function alignDoor() {
     restaurantLayout.getBoundingClientRect().right + manualOffset - door.offsetWidth + "px";
 }
 
+function alignWindows() {
+  const restaurantLayout = document.getElementById("restaurant-layout");
+  const window1 = document.querySelector(".window[data-window-id='1']");
+  const manualOffset = -39; // position to shift right
+
+  // Set the door's position so that its right edge aligns with #restaurant-layout's right border relative to the viewport + manualOffset.
+  window1.style.position = "fixed";
+  window1.style.top = restaurantLayout.getBoundingClientRect().top + manualOffset + "px";
+}
+
 //default to showing today's reservations
 setDatePickerMonth();
 highlightReservedTables(todayDateFormatted);
@@ -402,3 +412,5 @@ document.querySelector("form").addEventListener("submit", (event) => {
 
 alignDoor();
 window.addEventListener("resize", alignDoor);
+
+alignWindows();

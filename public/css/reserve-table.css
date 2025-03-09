@@ -608,7 +608,7 @@ body {
           transform: rotate(90deg);
         }
         .window[data-window-id="1"] {
-          top: 23.5px;
+          /* top: 23.5px; */
           right: min(35%, 800px);
         }
         .big.table[data-table-id="2"] {
