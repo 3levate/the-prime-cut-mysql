@@ -608,7 +608,6 @@ body {
           transform: rotate(90deg);
         }
         .window[data-window-id="1"] {
-          /* top: 23.5px; */
           right: min(35%, 800px);
         }
         .big.table[data-table-id="2"] {
@@ -695,9 +694,7 @@ body {
         }
         .window[data-window-id="3"] {
           flex-direction: column-reverse;
-          bottom: 23px;
-          /* left: max(39%, 500px); */
-          left: 39%;
+          left: max(39%, 500px);
         }
         .big.table[data-table-id="11"] {
           grid-area: bigTable11;
@@ -708,7 +705,6 @@ body {
         }
         .window[data-window-id="2"] {
           flex-direction: column-reverse;
-          bottom: 23px;
           right: min(20%, 200px);
         }
         #big-table-wrapper {

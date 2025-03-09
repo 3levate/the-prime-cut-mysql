@@ -63,18 +63,12 @@
           width: 85%;
 
           .window[data-window-id="1"] {
-            top: 222px;
             right: min(60%, 600px);
           }
-          #corner #door {
-            top: 39%;
-          }
           .window[data-window-id="2"] {
-            bottom: 22px;
             right: min(20%, 200px);
           }
           .window[data-window-id="3"] {
-            bottom: 22px;
             left: max(20%, 200px);
           }
         }
