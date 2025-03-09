@@ -363,12 +363,26 @@ function alignDoor() {
 
 function alignWindows() {
   const restaurantLayout = document.getElementById("restaurant-layout");
-  const window1 = document.querySelector(".window[data-window-id='1']");
-  const manualOffset = -39; // position to shift right
+  const restaurantLayoutRect = restaurantLayout.getBoundingClientRect();
+  const parentLayoutRect = restaurantLayout.offsetParent.getBoundingClientRect();
+  const topWindow = document.querySelector(".window[data-window-id='1']");
+  const bottomWindows = document.querySelectorAll(
+    ".window[data-window-id='2'], .window[data-window-id='3']"
+  );
+  const topWindowOffset = -39;
+  const bottomWindowsOffset = 39;
 
-  // Set the door's position so that its right edge aligns with #restaurant-layout's right border relative to the viewport + manualOffset.
-  window1.style.position = "fixed";
-  window1.style.top = restaurantLayout.getBoundingClientRect().top + manualOffset + "px";
+  topWindow.style.top = restaurantLayoutRect.top - parentLayoutRect.top + topWindowOffset + "px";
+
+  bottomWindows.forEach(
+    (window) =>
+      (window.style.top =
+        restaurantLayoutRect.bottom -
+        parentLayoutRect.top +
+        bottomWindowsOffset -
+        window.offsetHeight +
+        "px")
+  );
 }
 
 //default to showing today's reservations
@@ -411,6 +425,5 @@ document.querySelector("form").addEventListener("submit", (event) => {
 });
 
 alignDoor();
-window.addEventListener("resize", alignDoor);
-
 alignWindows();
+window.addEventListener("resize", alignDoor);
