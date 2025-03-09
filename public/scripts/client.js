@@ -70,10 +70,9 @@ async function addAvailableTableTimeslots(selectedTable) {
   }
 }
 
-function updateSelectTimeText(tableNumber) {
-  document.getElementById(
-    "select-time-text"
-  ).textContent = `Select a time for table no. ${tableNumber}`;
+function updateTableNumberText(tableNumber) {
+  console.log("updateTableNumberText", tableNumber);
+  document.getElementById("table-number-heading").textContent = tableNumber;
 }
 
 async function getReservedHoursByTableNumber(tableNum) {
@@ -355,6 +354,16 @@ async function logout() {
   }
 }
 
+function alignDoor() {
+  const restaurantLayout = document.getElementById("restaurant-layout");
+  const door = document.getElementById("door");
+  const manualOffset = 60; // position to shift right
+
+  // Set the door's position so that its right edge aligns with #restaurant-layout's right border relative to the viewport + manualOffset.
+  door.style.left =
+    restaurantLayout.getBoundingClientRect().right + manualOffset - door.offsetWidth + "px";
+}
+
 //default to showing today's reservations
 setDatePickerMonth();
 highlightReservedTables(todayDateFormatted);
@@ -366,7 +375,7 @@ document.querySelectorAll(".table").forEach((table) => {
   table.addEventListener("mouseenter", (event) => {
     const tableNumber = event.target.dataset.tableId;
     addAvailableTableTimeslots(tableNumber); //automatically converted to camel case from kebab case
-    updateSelectTimeText(tableNumber);
+    updateTableNumberText(tableNumber);
   });
 
   table.addEventListener("click", (event) => {
@@ -392,3 +401,6 @@ document.querySelectorAll(".table").forEach((table) => {
 document.querySelector("form").addEventListener("submit", (event) => {
   event.preventDefault();
 });
+
+alignDoor();
+window.addEventListener("resize", alignDoor);

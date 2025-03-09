@@ -335,7 +335,6 @@ body {
     background-color: white;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     position: relative;
 
     #login-overlay {
@@ -387,6 +386,7 @@ body {
       background-color: black;
       box-shadow: 3px 0px 7px 1px rgba(0, 0, 0, 0.48);
       width: 35%;
+      max-width: 600px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -399,23 +399,25 @@ body {
         h2 {
           text-align: center;
           margin: 0;
-          font-size: 2rem;
+          font-size: 1.85rem;
           color: white;
           font-family: "Playfair Display", serif;
           text-transform: uppercase;
-          padding: 40px 0 40px 0;
+          padding: 22% 0 60px 0;
+        }
+        h3 {
+          display: flex;
+          align-items: center;
+          text-align: left;
+          margin: 0;
+          font-size: 1.15rem;
+          color: white;
+          font-family: "proxima-nova", sans-serif;
+          padding: 0 0 30px 0;
+          text-transform: uppercase;
         }
         #datepicker-small {
           display: none;
-        }
-        h3 {
-          text-align: left;
-          margin: 0;
-          font-size: 1rem;
-          color: white;
-          font-family: "proxima-nova", sans-serif;
-          padding: 40px 0 0 0;
-          text-transform: uppercase;
         }
         #timeslots-container {
           display: flex;
@@ -423,14 +425,15 @@ body {
           justify-content: flex-start;
 
           gap: 10px;
-          padding: 20px 0 0 0;
+          padding: 35px 0 0 0;
 
           .timeslot {
             opacity: 1;
             font-size: 0.85rem;
-            font-weight: 500;
-            font-family: "Playfair Display", serif;
-            padding: 0.4rem 0.65rem;
+            font-weight: 600;
+            font-family: "Inter", sans-serif;
+            /* font-family: "Playfair Display", serif; */
+            padding: 10px 8px 10px 8px;
             border-radius: 1px;
             cursor: pointer;
             user-select: none;
@@ -444,6 +447,7 @@ body {
             background-color: white;
             border: 2px solid white;
             color: rgb(101, 101, 101);
+            /* color: black; */
           }
 
           .hide {
@@ -453,231 +457,234 @@ body {
       }
     }
 
-    #restaurant-layout {
-      margin: 60px 60px 60px 50px;
-      border-radius: 1px;
-      border: 10px solid black;
-      width: 55%;
-      height: auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-      grid-template-rows: 1fr 1fr 1fr;
-      grid-template-areas:
-        "bigTable1 . bigTable2 smallTable3 . corner corner"
-        "bigTable4 . smallTableGroup . smallTable7 smallTable8 smallTable9"
-        "bigTable10 bigTable11 smallTable12 . bigTableGroup bigTableGroup bigTableGroup";
-      justify-items: center;
+    #restaurant-layout-container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
       align-items: center;
 
-      .window {
-        width: 7rem;
-        height: 50px;
-        position: absolute;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        text-align: center;
-        background-color: white;
-
-        p {
-          font-family: "Playfair Display", serif;
-          font-size: 0.7rem;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          font-weight: 600;
-          color: black;
-        }
-        .window-pane {
-          width: 100%;
-          height: 3px;
-          background-color: white;
-          border-top: 1px solid black;
-          border-bottom: 1px solid black;
-        }
-      }
-      .table rect {
-        stroke: #a0a0a0 !important;
-      }
-      .table {
-        transition: all 0.15s ease-in-out;
-        cursor: pointer;
-      }
-      .table:hover {
-        /* -webkit-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.19);
-        box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.19); */
-
-        background: linear-gradient(to right, grey 2px, transparent 2px) 0 0,
-          linear-gradient(to right, grey 2px, transparent 2px) 0 100%,
-          linear-gradient(to left, grey 2px, transparent 2px) 100% 0,
-          linear-gradient(to left, grey 2px, transparent 2px) 100% 100%,
-          linear-gradient(to bottom, grey 2px, transparent 2px) 0 0,
-          linear-gradient(to bottom, grey 2px, transparent 2px) 100% 0,
-          linear-gradient(to top, grey 2px, transparent 2px) 0 100%,
-          linear-gradient(to top, grey 2px, transparent 2px) 100% 100%;
-
-        background-repeat: no-repeat;
-        background-size: 10px 10px;
-      }
-      .locked {
-        cursor: not-allowed;
-      }
-      .locked:hover {
-        background: none;
-      }
-      .selected {
-        background: linear-gradient(to right, black 2px, transparent 2px) 0 0,
-          linear-gradient(to right, black 2px, transparent 2px) 0 100%,
-          linear-gradient(to left, black 2px, transparent 2px) 100% 0,
-          linear-gradient(to left, black 2px, transparent 2px) 100% 100%,
-          linear-gradient(to bottom, black 2px, transparent 2px) 0 0,
-          linear-gradient(to bottom, black 2px, transparent 2px) 100% 0,
-          linear-gradient(to top, black 2px, transparent 2px) 0 100%,
-          linear-gradient(to top, black 2px, transparent 2px) 100% 100%;
-
-        background-repeat: no-repeat;
-        background-size: 10px 10px;
-      }
-      .selected:hover {
-        background: linear-gradient(to right, black 2px, transparent 2px) 0 0,
-          linear-gradient(to right, black 2px, transparent 2px) 0 100%,
-          linear-gradient(to left, black 2px, transparent 2px) 100% 0,
-          linear-gradient(to left, black 2px, transparent 2px) 100% 100%,
-          linear-gradient(to bottom, black 2px, transparent 2px) 0 0,
-          linear-gradient(to bottom, black 2px, transparent 2px) 100% 0,
-          linear-gradient(to top, black 2px, transparent 2px) 0 100%,
-          linear-gradient(to top, black 2px, transparent 2px) 100% 100%;
-
-        background-repeat: no-repeat;
-        background-size: 10px 10px;
-      }
-      .reserved rect {
-        stroke: #ff2200 !important;
-        transition: stroke 0.3s ease-in-out !important;
-      }
-      .some-availability rect {
-        stroke: #ad9113 !important;
-        transition: stroke 0.3s ease-in-out !important;
-      }
-
-      .big.table[data-table-id="1"] {
-        grid-area: bigTable1;
-        transform: rotate(90deg);
-      }
-      .window[data-window-id="1"] {
-        top: 21px;
-        right: min(50%, 550px);
-      }
-      .big.table[data-table-id="2"] {
-        grid-area: bigTable2;
-      }
-      .small.table[data-table-id="3"] {
-        grid-area: smallTable3;
-        transform: rotate(90deg);
-      }
-      #corner {
-        grid-area: corner;
-        display: flex;
-        flex-direction: column;
+      #restaurant-layout {
+        margin: 0 5% 0 5%;
+        border-radius: 1px;
+        border: 10px solid black;
         width: 100%;
-        height: 100%;
+        height: 85%;
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-areas:
+          "bigTable1 . bigTable2 smallTable3 . corner corner"
+          "bigTable4 . smallTableGroup . smallTable7 smallTable8 smallTable9"
+          "bigTable10 bigTable11 smallTable12 . bigTableGroup bigTableGroup bigTableGroup";
+        justify-items: center;
+        align-items: center;
 
-        #washroom {
-          border-bottom: 10px solid black;
-          border-left: 10px solid black;
-          grid-area: washroom;
-          width: 100%;
-          height: 60%;
+        .window {
+          width: 10%;
+          height: 50px;
+          position: absolute;
           display: flex;
+          flex-direction: column;
           justify-content: center;
-          align-items: center;
+          text-align: center;
+          background-color: white;
 
-          svg {
-            width: 4.5rem;
-            height: auto;
-            .st0 {
-              fill: white;
-            }
-            .st1 {
-              fill: white;
-            }
-            .st2 {
-              fill: none;
-              stroke: black;
-              stroke-miterlimit: 10;
-            }
-            .st3 {
-              fill: none;
-              stroke: black;
-              stroke-width: 0.8002;
-              stroke-miterlimit: 10;
-            }
+          p {
+            font-family: "Playfair Display", serif;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            color: black;
+          }
+          .window-pane {
+            width: 100%;
+            height: 3px;
+            background-color: white;
+            border-top: 1px solid black;
+            border-bottom: 1px solid black;
           }
         }
-        #door {
-          display: flex;
-          justify-content: end;
-          height: 40%;
+        .table rect {
+          stroke: #a0a0a0 !important;
+        }
+        .table {
+          transition: all 0.15s ease-in-out;
+          cursor: pointer;
+        }
+        .table:hover {
+          /* -webkit-box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.19);
+        box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.19); */
 
-          svg {
+          background: linear-gradient(to right, grey 2px, transparent 2px) 0 0,
+            linear-gradient(to right, grey 2px, transparent 2px) 0 100%,
+            linear-gradient(to left, grey 2px, transparent 2px) 100% 0,
+            linear-gradient(to left, grey 2px, transparent 2px) 100% 100%,
+            linear-gradient(to bottom, grey 2px, transparent 2px) 0 0,
+            linear-gradient(to bottom, grey 2px, transparent 2px) 100% 0,
+            linear-gradient(to top, grey 2px, transparent 2px) 0 100%,
+            linear-gradient(to top, grey 2px, transparent 2px) 100% 100%;
+
+          background-repeat: no-repeat;
+          background-size: 10px 10px;
+        }
+        .locked {
+          cursor: not-allowed;
+        }
+        .locked:hover {
+          background: none;
+        }
+        .selected {
+          background: linear-gradient(to right, black 2px, transparent 2px) 0 0,
+            linear-gradient(to right, black 2px, transparent 2px) 0 100%,
+            linear-gradient(to left, black 2px, transparent 2px) 100% 0,
+            linear-gradient(to left, black 2px, transparent 2px) 100% 100%,
+            linear-gradient(to bottom, black 2px, transparent 2px) 0 0,
+            linear-gradient(to bottom, black 2px, transparent 2px) 100% 0,
+            linear-gradient(to top, black 2px, transparent 2px) 0 100%,
+            linear-gradient(to top, black 2px, transparent 2px) 100% 100%;
+
+          background-repeat: no-repeat;
+          background-size: 10px 10px;
+        }
+        .selected:hover {
+          background: linear-gradient(to right, black 2px, transparent 2px) 0 0,
+            linear-gradient(to right, black 2px, transparent 2px) 0 100%,
+            linear-gradient(to left, black 2px, transparent 2px) 100% 0,
+            linear-gradient(to left, black 2px, transparent 2px) 100% 100%,
+            linear-gradient(to bottom, black 2px, transparent 2px) 0 0,
+            linear-gradient(to bottom, black 2px, transparent 2px) 100% 0,
+            linear-gradient(to top, black 2px, transparent 2px) 0 100%,
+            linear-gradient(to top, black 2px, transparent 2px) 100% 100%;
+
+          background-repeat: no-repeat;
+          background-size: 10px 10px;
+        }
+        .reserved rect {
+          stroke: #ff2200 !important;
+          transition: stroke 0.3s ease-in-out !important;
+        }
+        .some-availability rect {
+          stroke: #ad9113 !important;
+          transition: stroke 0.3s ease-in-out !important;
+        }
+
+        .big.table[data-table-id="1"] {
+          grid-area: bigTable1;
+          transform: rotate(90deg);
+        }
+        .window[data-window-id="1"] {
+          top: 20px;
+          right: min(35%, 800px);
+        }
+        .big.table[data-table-id="2"] {
+          grid-area: bigTable2;
+        }
+        .small.table[data-table-id="3"] {
+          grid-area: smallTable3;
+          transform: rotate(90deg);
+        }
+        #corner {
+          grid-area: corner;
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+          height: 100%;
+
+          #washroom {
+            border-bottom: 10px solid black;
+            border-left: 10px solid black;
+            grid-area: washroom;
+            width: 100%;
+            height: 60%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            svg {
+              width: 4.5rem;
+              height: auto;
+              .st0 {
+                fill: white;
+              }
+              .st1 {
+                fill: white;
+              }
+              .st2 {
+                fill: none;
+                stroke: black;
+                stroke-miterlimit: 10;
+              }
+              .st3 {
+                fill: none;
+                stroke: black;
+                stroke-width: 0.8002;
+                stroke-miterlimit: 10;
+              }
+            }
+          }
+          #door {
+            /* aliged with js */
             position: absolute;
-            right: max(1.35%, 12px);
+            top: 26%;
             width: 150px;
             height: 150px;
             transform: rotate(-90deg);
           }
         }
-      }
-      .big.table[data-table-id="4"] {
-        grid-area: bigTable4;
-        transform: rotate(90deg);
-      }
-      #small-table-wrapper {
-        grid-area: smallTableGroup;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 30px;
-        width: 100%;
-      }
-      .small.table[data-table-id="7"] {
-        grid-area: smallTable7;
-        transform: rotate(90deg);
-      }
-      .small.table[data-table-id="8"] {
-        grid-area: smallTable8;
-        transform: rotate(90deg);
-      }
-      .small.table[data-table-id="9"] {
-        grid-area: smallTable9;
-        transform: rotate(90deg);
-      }
-      .big.table[data-table-id="10"] {
-        grid-area: bigTable10;
-      }
-      .window[data-window-id="3"] {
-        flex-direction: column-reverse;
-        top: 720px;
-        left: max(45%, 100px);
-      }
-      .big.table[data-table-id="11"] {
-        grid-area: bigTable11;
-      }
-      .small.table[data-table-id="12"] {
-        grid-area: smallTable12;
-        transform: rotate(90deg);
-      }
-      .window[data-window-id="2"] {
-        flex-direction: column-reverse;
-        top: 720px;
-        right: min(20%, 200px);
-      }
-      #big-table-wrapper {
-        grid-area: bigTableGroup;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        gap: 20px;
-        width: 80%;
+        .big.table[data-table-id="4"] {
+          grid-area: bigTable4;
+          transform: rotate(90deg);
+        }
+        #small-table-wrapper {
+          grid-area: smallTableGroup;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          gap: 30px;
+          width: 100%;
+        }
+        .small.table[data-table-id="7"] {
+          grid-area: smallTable7;
+          transform: rotate(90deg);
+        }
+        .small.table[data-table-id="8"] {
+          grid-area: smallTable8;
+          transform: rotate(90deg);
+        }
+        .small.table[data-table-id="9"] {
+          grid-area: smallTable9;
+          transform: rotate(90deg);
+        }
+        .big.table[data-table-id="10"] {
+          grid-area: bigTable10;
+        }
+        .window[data-window-id="3"] {
+          flex-direction: column-reverse;
+          bottom: 19px;
+          left: max(45%, 100px);
+        }
+        .big.table[data-table-id="11"] {
+          grid-area: bigTable11;
+        }
+        .small.table[data-table-id="12"] {
+          grid-area: smallTable12;
+          transform: rotate(90deg);
+        }
+        .window[data-window-id="2"] {
+          flex-direction: column-reverse;
+          bottom: 19px;
+          right: min(20%, 200px);
+        }
+        #big-table-wrapper {
+          grid-area: bigTableGroup;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          gap: 20px;
+          width: 80%;
+        }
       }
     }
   }
