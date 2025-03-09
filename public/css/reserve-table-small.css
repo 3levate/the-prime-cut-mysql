@@ -19,6 +19,7 @@
           width: auto;
           padding: 50px;
           gap: 20px;
+          flex-direction: row;
 
           h2 {
             padding: 0;
