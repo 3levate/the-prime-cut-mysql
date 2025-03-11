@@ -94,7 +94,7 @@
   .datepicker-calendar {
     display: grid;
     grid-template-columns: repeat(7, 1fr);
-    grid-row-gap: 1rem;
+    grid-row-gap: 0.7rem;
     /* padding: 10px; */
 
     .day-name {

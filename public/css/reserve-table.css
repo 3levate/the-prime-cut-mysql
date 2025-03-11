@@ -49,20 +49,6 @@ html {
   scrollbar-width: thin;
 }
 
-/* Chrome - Hides track and width/height set for vertical/horizontal scrollbars */
-::-webkit-scrollbar {
-  background-color: transparent;
-  width: 7px;
-  height: 7px;
-}
-
-/* Chrome - Changes thumb color and rounds scrollbar edges, in Chrome any 
-scrollbar changes disables default styling and rounding so corners appear squared */
-::-webkit-scrollbar-thumb {
-  background-color: hsla(0, 0%, 46%, 0.5);
-  border-radius: 8px;
-}
-
 html,
 body {
   /* #door is overflowing but needs to remain 150px width for svg to be at correct size */
@@ -95,6 +81,7 @@ body {
     left: -100%;
     width: 50%;
     height: 100%;
+    transition: left 0.3s;
     z-index: 9999;
     box-sizing: border-box;
     transition: left 0.5s ease-in-out;
@@ -384,7 +371,7 @@ body {
         color: white;
         font-family: "Playfair Display", serif;
         text-transform: uppercase;
-        padding: 15% 0 50px 0;
+        padding: 10% 0 40px 0;
       }
       #reserve-a-table-side-panel {
         display: flex;

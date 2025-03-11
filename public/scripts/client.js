@@ -8,6 +8,8 @@ const TABLE_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 let GLOBAL_STATE_CURRENT_MONTH = new Date();
 let GLOBAL_STATE_SELECTED_TABLE = null;
 let GLOBAL_STATE_SELECTED_TIMESLOT = null;
+let resizeTimeout;
+const smallWidthMediaQuery = window.matchMedia("(max-width: 1350px)");
 
 async function getReservations(date) {
   try {
@@ -426,4 +428,10 @@ document.querySelector("form").addEventListener("submit", (event) => {
 
 alignDoor();
 alignWindows();
-window.addEventListener("resize", alignDoor);
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    alignDoor();
+  }, 250);
+});
+smallWidthMediaQuery.addEventListener("change", alignWindows);
