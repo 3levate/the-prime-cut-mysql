@@ -10,11 +10,19 @@
   <li class="underline" onclick="">Our Team</li>
   <li class="underline" onclick="">Careers</li>
   <li id="profile">
-    <span class="material-symbols-outlined"> account_circle </span>
+    <span class="material-symbols-outlined" onclick="window.location.href = '/html/profile.html'">
+      account_circle
+    </span>
     <ul id="dropdown">
-      <li id="login" onclick="window.location.href = '/html/login.html'">Login</li>
+      <li
+        id="login"
+        onclick="window.location.href = `/html/login.html?redirect=${window.location.pathname}`">
+        Login
+      </li>
       <li id="logout" onclick="logout()">Logout</li>
-      <li id="signup" onclick="window.location.href = '/html/login.html?form-type=signup'">
+      <li
+        id="signup"
+        onclick="window.location.href = `/html/login.html?form-type=signup&redirect=${window.location.pathname}`">
         Sign Up
       </li>
     </ul>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profile</title>
+
+    <link rel="icon" type="image/x-icon" href="/assets/meat.ico" />
+    <link rel="stylesheet" href="/css/nav.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
+    <link rel="stylesheet" href="/css/newsletter.css" />
+    <link rel="stylesheet" href="/css/profile.css" />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=account_circle,chevron_left,chevron_right,event,keyboard_arrow_down,schedule,table_bar"
+      rel="stylesheet" />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+Newa&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+      @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Newa&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
+    </style>
+
+    <script src="/js/load-component.js"></script>
+    <script>
+      async function isUserAuthenticated() {
+        try {
+          const response = await fetch("/isauthenticated");
+          console.log("isAuthenticated", response);
+          if (response.status == 401) {
+            alert("You do not have an account or are not logged in. Please login or signup.");
+            window.location.href = "/html/login.html";
+          } else {
+            document.getElementById("login").classList.add("hidden");
+            document.getElementById("signup").classList.add("hidden");
+          }
+        } catch (error) {
+          console.log(`${error.name} in isAuthenticated`, error);
+        }
+      }
+    </script>
+    <script src="/js/nav.js"></script>
+  </head>
+  <body>
+    <header id="nav"></header>
+    <script>
+      (async () => {
+        console.log("attempting to load nav");
+        await loadComponent("nav", "/html/nav.html");
+        loginDropdownListeners();
+        isUserAuthenticated();
+      })();
+    </script>
+
+    <div id="container">
+      <h1>My Reservations</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Table Number</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div id="newsletter"></div>
+    <script>
+      console.log("attempting to load newsletter");
+      loadComponent("newsletter", "/html/newsletter.html");
+    </script>
+
+    <footer id="footer"></footer>
+    <script>
+      console.log("attempting to load footer");
+      loadComponent("footer", "/html/footer.html");
+    </script>
+    <script src="/js/profile.js"></script>
+  </body>
+</html>

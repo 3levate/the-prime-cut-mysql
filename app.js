@@ -171,7 +171,7 @@ app.get("/isauthenticated", (request, response) => {
     : response.status(401).send(JSON.stringify("Session does not exist or is invalid"));
 });
 
-app.get("/get-guest-details", async (request, response) => {
+app.get("/guest-details", async (request, response) => {
   const { userId } = request.session;
   try {
     const [guest] = await pool.execute(
@@ -203,6 +203,36 @@ app.delete("/logout", (request, response) => {
       return response.status(200).json({ message: "Successfully logged out" });
     }
   });
+});
+
+app.get("/guest-reservations", async (request, response) => {
+  const { userId } = request.session;
+
+  try {
+    console.log("getting reservations for guest: ", userId);
+
+    const [guestReservations] = await pool.execute(
+      `
+      SELECT date, hour, table_number
+      FROM reservations
+      WHERE guest_id = ?;
+      `,
+      [userId]
+    );
+    console.log("guestReservations", guestReservations);
+
+    response.status(200).json({
+      message: guestReservations.length
+        ? `Successfully retrieved reservations for guest ${userId}`
+        : `No reservations found for guest ${userId}`,
+      data: guestReservations,
+    });
+  } catch (error) {
+    console.error(`${error.name} while getting guest reservations for ${userId}`, error);
+    response
+      .status(500)
+      .json({ message: `${error.name} while getting guest reservations for ${userId}`, error });
+  }
 });
 
 // for resoure not found (404)

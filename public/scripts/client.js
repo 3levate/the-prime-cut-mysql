@@ -264,7 +264,7 @@ function updateDate(date) {
 async function storeReservation(event) {
   try {
     console.log("global state selected table", GLOBAL_STATE_SELECTED_TABLE);
-    const response = await fetch("http://localhost:8000/reservations", {
+    const response = await fetch("/reservations", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -294,7 +294,7 @@ async function showSuccessScreen(response) {
 
 async function getFirstName() {
   try {
-    const response = await fetch("/get-guest-details");
+    const response = await fetch("/guest-details");
     const { first_name: firstName } = await response.json();
     return firstName;
   } catch (error) {
@@ -333,24 +333,6 @@ function smallDatePickerClick(event) {
 
 function showLoginOverlay() {
   document.getElementById("login-overlay").classList.add("active");
-}
-
-async function logout() {
-  try {
-    const response = await fetch("/logout", {
-      method: "DELETE",
-    });
-
-    if (response.ok) {
-      window.location.href = "/html/login.html?form-type=logout";
-    } else {
-      //if server-side error
-      alert("Error logging out, please try again.");
-    }
-  } catch (error) {
-    console.error(`${error.name} while logging out`, error);
-    alert("Error logging out, please try again.");
-  }
 }
 
 function alignDoor() {

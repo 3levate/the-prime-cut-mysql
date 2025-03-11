@@ -62,6 +62,9 @@
           height: 85%;
           width: 85%;
 
+          #corner #door {
+            top: 38.5%;
+          }
           .window[data-window-id="1"] {
             right: min(60%, 600px);
           }

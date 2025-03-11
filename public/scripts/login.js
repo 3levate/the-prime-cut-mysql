@@ -1,12 +1,13 @@
+const urlParams = new URLSearchParams(window.location.search);
+const requestFormType = urlParams.get("form-type");
+const redirectPath = urlParams.get("redirect");
 const RESPONSE_STATUSES = {
   200: () => {
-    window.location.href = "/html/reserve-table.html";
+    window.location.href = redirectPath;
   },
   401: showIncorrectPasswordErrorMessage,
   404: convertToSignupForm,
 };
-const urlParams = new URLSearchParams(window.location.search);
-const requestFormType = urlParams.get("form-type");
 
 async function authenticateGuest(event) {
   event.preventDefault();
