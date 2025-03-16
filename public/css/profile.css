@@ -1,6 +1,6 @@
 :root {
   --table-row-primary: rgb(17, 17, 17);
-  --table-row-secondary: rgb(27, 27, 27);
+  --table-row-secondary: rgb(24, 24, 24);
   --test: rgb(70, 70, 70);
 }
 
@@ -68,20 +68,22 @@ body {
 
       thead {
         tr {
-          background-color: var(--table-row-primary);
-          /* background-color: black; */
+          /* background-color: var(--table-row-primary); */
+          background-color: black;
 
           th {
             padding: 30px;
             width: 14vw;
             color: #df1f1f;
+            text-transform: uppercase;
+            letter-spacing: 0.2rem;
           }
         }
       }
       tbody {
         tr {
           background-color: var(--table-row-primary);
-
+          transition: all 0.3s ease;
           td {
             padding: 30px;
           }
