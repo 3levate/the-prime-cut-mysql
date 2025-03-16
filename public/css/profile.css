@@ -1,3 +1,9 @@
+:root {
+  --table-row-primary: rgb(17, 17, 17);
+  --table-row-secondary: rgb(27, 27, 27);
+  --test: rgb(70, 70, 70);
+}
+
 * {
   scrollbar-color: #505050 transparent;
 }
@@ -9,31 +15,79 @@ html {
 
 body {
   background-color: #171616;
-  /* background-color: white; */
   margin: 0;
 }
 
-#nav {
-  position: sticky;
-  top: 0;
-  box-shadow: 0 1.5px 3px 1px rgba(0, 0, 0, 0.218);
-  background-color: black;
-}
-
-#container {
+#bg-container {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 30px;
+  justify-content: center;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 70%, rgba(0, 0, 0, 0.95)),
+    url("/assets/steakhouse2.jpg");
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 100vh;
 
-  h1 {
-    font-family: "Playfair Display", serif;
-    text-transform: uppercase;
-    color: white;
+  #nav {
+    position: fixed;
+    top: 0;
+    background-color: transparent;
   }
-  table {
-    color: white;
-    font-family: "proxima-nova", sans-serif;
+
+  #container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    background-color: #171616;
+    padding: 90px;
+    -webkit-box-shadow: 0px 0px 47px 5px rgba(0, 0, 0, 0.27);
+    -moz-box-shadow: 0px 0px 47px 5px rgba(0, 0, 0, 0.27);
+    box-shadow: 0px 0px 47px 5px rgba(0, 0, 0, 0.6);
+
+    h1 {
+      font-family: "Playfair Display", serif;
+      text-transform: uppercase;
+      color: white;
+      margin: 0;
+      padding: 0;
+      font-size: 2.5rem;
+    }
+    #guest-reservations-table {
+      color: white;
+      font-family: "proxima-nova", sans-serif;
+      background-color: transparent;
+      text-align: left;
+      border-collapse: separate;
+      border-spacing: 0 5px;
+      table-layout: fixed;
+
+      thead {
+        tr {
+          background-color: var(--table-row-primary);
+
+          th {
+            padding: 30px;
+            width: 14vw;
+            color: #df1f1f;
+          }
+        }
+      }
+      tbody {
+        tr {
+          background-color: var(--table-row-primary);
+
+          td {
+            padding: 30px;
+          }
+        }
+        tr:hover {
+          background-color: var(--table-row-secondary);
+        }
+      }
+    }
   }
 }
