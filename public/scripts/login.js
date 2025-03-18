@@ -3,7 +3,9 @@ const requestFormType = urlParams.get("form-type");
 const redirectPath = urlParams.get("redirect");
 const RESPONSE_STATUSES = {
   200: () => {
-    window.location.href = redirectPath;
+    window.location.href = redirectPath.includes("null")
+      ? "/html/reserve-table.html"
+      : redirectPath;
   },
   401: showIncorrectPasswordErrorMessage,
   404: convertToSignupForm,
